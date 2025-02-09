@@ -234,6 +234,8 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "console_error_panic_hook",
+ "serde",
+ "serde_json",
  "tower-service",
  "worker",
  "worker-macros",
