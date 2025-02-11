@@ -1,4 +1,4 @@
-use serde_json::Value;
+use serde_json::{json, Value};
 use worker::{Fetch, Method, Request, RequestInit, Result};
 
 pub async fn github_request(
@@ -23,4 +23,69 @@ pub async fn github_request(
     req.headers_mut()?.set("Content-Type", "application/json")?;
 
     Fetch::Request(req).send().await?.json().await
+}
+
+pub async fn get_gist_file(token: &str, gist_id: &str, filename: &str) -> Result<String> {
+    let url = format!("https://api.github.com/gists/{}", gist_id);
+    let response = github_request(token, Method::Get, &url, None).await?;
+    if let Some(files) = response["files"].as_object() {
+        if let Some(file) = files.get(filename) {
+            if let Some(content) = file["content"].as_str() {
+                return Ok(content.to_string());
+            }
+        }
+    }
+
+    Err(worker::Error::RustError(format!(
+        "File '{}' not found in Gist '{}'",
+        filename, gist_id
+    )))
+}
+
+pub async fn update_gist_file(
+    token: &str,
+    gist_id: &str,
+    filename: &str,
+    content: &str,
+) -> Result<()> {
+    let url = format!("https://api.github.com/gists/{}", gist_id);
+    let body = json!({
+        "files": {
+            filename: {
+                "content": content
+            }
+        }
+    });
+    github_request(token, Method::Patch, &url, Some(body)).await?;
+    Ok(())
+}
+
+pub async fn get_gist_file_chunked(
+    token: &str,
+    gist_id: &str,
+    filename: &str,
+    page: usize,
+    chunk_size: usize,
+) -> Result<String> {
+    let url = format!("https://api.github.com/gists/{}", gist_id);
+    let response = github_request(token, Method::Get, &url, None).await?;
+    if let Some(files) = response["files"].as_object() {
+        if let Some(file) = files.get(filename) {
+            if let Some(content) = file["content"].as_str() {
+                let start = (page - 1) * chunk_size;
+                let end = start + chunk_size;
+                let chunk = content
+                    .chars()
+                    .skip(start)
+                    .take(end - start)
+                    .collect::<String>();
+                return Ok(chunk);
+            }
+        }
+    }
+
+    Err(worker::Error::RustError(format!(
+        "File '{}' not found in Gist '{}'",
+        filename, gist_id
+    )))
 }
