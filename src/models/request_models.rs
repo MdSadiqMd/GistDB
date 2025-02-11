@@ -49,3 +49,12 @@ pub struct DeleteCollectionRequest {
 pub struct DeleteDatabaseRequest {
     pub gist_id: String,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct SearchRequest {
+    pub gist_id: String,
+    pub collection_name: String,
+    pub query: String,
+    pub field: Option<String>,
+    pub limit: Option<usize>,
+}
