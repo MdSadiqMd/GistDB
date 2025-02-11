@@ -1,5 +1,7 @@
+use crate::models::request_models::SearchRequest;
 use serde_json::Value;
 use worker::Result;
+use worker::*;
 
 pub fn search_json(data: &Value, query: &str, field: Option<&str>) -> Result<Vec<String>> {
     let mut results = Vec::new();
@@ -32,4 +34,17 @@ fn json_contains(value: &Value, query: &str) -> bool {
         Value::Object(o) => o.values().any(|v| json_contains(v, query)),
         _ => false,
     }
+}
+
+pub fn get_auth_token(req: &Request) -> Result<String> {
+    req.headers()
+        .get("Authorization")?
+        .ok_or_else(|| worker::Error::RustError("Authorization header missing".to_string()))
+        .map(|token| token.replace("Bearer ", ""))
+}
+
+pub async fn parse_body(req: &mut Request) -> Result<SearchRequest> {
+    req.json()
+        .await
+        .map_err(|e| worker::Error::RustError(format!("Failed to parse request body: {}", e)))
 }

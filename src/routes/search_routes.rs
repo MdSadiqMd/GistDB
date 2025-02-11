@@ -6,22 +6,9 @@ use serde_json::{json, Value};
 use worker::Cache;
 use worker::*;
 
-fn get_auth_token(req: &Request) -> Result<String> {
-    req.headers()
-        .get("Authorization")?
-        .ok_or_else(|| worker::Error::RustError("Authorization header missing".to_string()))
-        .map(|token| token.replace("Bearer ", ""))
-}
-
-async fn parse_body(req: &mut Request) -> Result<SearchRequest> {
-    req.json()
-        .await
-        .map_err(|e| worker::Error::RustError(format!("Failed to parse request body: {}", e)))
-}
-
 pub async fn search_objects(mut req: Request, _ctx: RouteContext<()>) -> Result<Response> {
-    let token = get_auth_token(&req)?;
-    let payload: SearchRequest = parse_body(&mut req).await?;
+    let token = search::get_auth_token(&req)?;
+    let payload: SearchRequest = search::parse_body(&mut req).await?;
 
     let filename = format!("{}.json", payload.collection_name);
     let cache_key = format!(
