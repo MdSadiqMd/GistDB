@@ -51,6 +51,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         "POST /api/objects": "Create a new object",
                         "PUT /api/objects": "Update an existing object",
                         "DELETE /api/objects": "Delete an object"
+                    },
+                    "search":{
+                        "POST /api/search": "Search objects"
                     }
                 },
                 "documentation": "https://github.com/MdSadiqMd/GistDB"
