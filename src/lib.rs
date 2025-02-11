@@ -1,4 +1,6 @@
-use crate::routes::{collection_routes, database_routes, health_routes, object_routes};
+use crate::routes::{
+    collection_routes, database_routes, health_routes, object_routes, search_routes,
+};
 use serde_json::json;
 use worker::{event, Env, Request, Response, Result, Router};
 mod models;
@@ -63,6 +65,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .post_async("/api/objects", object_routes::create_object)
         .put_async("/api/objects", object_routes::update_object)
         .delete_async("/api/objects", object_routes::delete_object)
+        .post_async("/api/search", search_routes::search_objects)
         .run(req, env)
         .await
 }

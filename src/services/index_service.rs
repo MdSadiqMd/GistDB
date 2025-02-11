@@ -2,20 +2,21 @@ use bloom::BloomFilter;
 use serde_json::{Map, Value};
 use std::collections::HashMap;
 
+#[allow(dead_code)]
 pub struct SparseIndex {
     index_granularity: usize,
     field_indexes: HashMap<String, BloomFilter>,
 }
 
 impl SparseIndex {
-    pub fn new(granularity: usize) -> Self {
+    pub fn _new(granularity: usize) -> Self {
         Self {
             index_granularity: granularity,
             field_indexes: HashMap::new(),
         }
     }
 
-    pub fn create_index(&mut self, data: &Map<String, Value>, field: &str) -> Map<String, Value> {
+    pub fn _create_index(&mut self, data: &Map<String, Value>, field: &str) -> Map<String, Value> {
         let mut index = Map::new();
         let mut counter = 0;
 
@@ -41,7 +42,7 @@ impl SparseIndex {
         index
     }
 
-    pub fn exists_in_index(&self, field: &str, value: &str) -> bool {
+    pub fn _exists_in_index(&self, field: &str, value: &str) -> bool {
         if let Some(filter) = self.field_indexes.get(field) {
             filter.contains(&value)
         } else {

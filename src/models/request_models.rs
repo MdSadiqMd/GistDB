@@ -56,5 +56,5 @@ pub struct SearchRequest {
     pub collection_name: String,
     pub query: String,
     pub field: Option<String>,
-    pub limit: Option<usize>,
+    // pub limit: Option<usize>,
 }

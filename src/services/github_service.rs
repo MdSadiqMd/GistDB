@@ -42,6 +42,7 @@ pub async fn get_gist_file(token: &str, gist_id: &str, filename: &str) -> Result
     )))
 }
 
+#[allow(dead_code)]
 pub async fn update_gist_file(
     token: &str,
     gist_id: &str,
@@ -60,6 +61,7 @@ pub async fn update_gist_file(
     Ok(())
 }
 
+#[allow(dead_code)]
 pub async fn get_gist_file_chunked(
     token: &str,
     gist_id: &str,
