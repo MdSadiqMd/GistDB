@@ -1,0 +1,447 @@
+openapi: 3.1.0
+info:
+  title: GistDB API
+  version: 1.0.0
+  description: A document database powered by GitHub Gists
+  contact:
+    name: MdSadiqMd
+    url: https://github.com/MdSadiqMd/GistDB
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: /
+    description: Main API server
+
+paths:
+  /:
+    get:
+      summary: Get API information
+      description: Returns basic API information and documentation links
+      responses:
+        "200":
+          description: API information
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/request_models/ApiInfo"
+
+  /health:
+    get:
+      summary: Health check
+      description: Returns system health status
+      responses:
+        "200":
+          description: Health status
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/request_models/HealthResponse"
+
+  /api/databases:
+    post:
+      summary: Create database
+      description: Creates a new database using GitHub Gists
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/request_models/CreateDatabaseRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Database created
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal server error
+
+    delete:
+      summary: Delete database
+      description: Deletes an existing database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/DeleteDatabaseRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Database deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+
+  /api/{gistId}:
+    get:
+      summary: Get database contents
+      description: Retrieves contents of a database or specific collection
+      parameters:
+        - name: gistId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: collection_name
+          in: query
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Database contents
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /api/collections:
+    post:
+      summary: Create collection
+      description: Creates a new collection in an existing database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/request_models/CreateCollectionRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Collection created
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "409":
+          description: Collection exists
+
+    delete:
+      summary: Delete collection
+      description: Deletes an existing collection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/request_models/DeleteCollectionRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Collection deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /api/objects:
+    post:
+      summary: Create object
+      description: Creates a new object in a collection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/request_models/CreateObjectRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Object created
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+
+    put:
+      summary: Update object
+      description: Updates an existing object
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/request_models/UpdateObjectRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Object updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+    delete:
+      summary: Delete object
+      description: Deletes an existing object
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/request_models/DeleteObjectRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Object deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+
+  /api/search:
+    post:
+      summary: Search objects
+      description: Searches objects in a collection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/src/models/request_models/SearchRequest"
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/src/models/response_models/ApiResponse"
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+
+components:
+  schemas:
+    ApiInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+        author:
+          type: object
+          properties:
+            name:
+              type: string
+            github:
+              type: string
+            X:
+              type: string
+        features:
+          type: array
+          items:
+            type: string
+        endpoints:
+          type: object
+        documentation:
+          type: string
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            overall:
+              type: string
+            timestamp:
+              type: string
+        version:
+          type: object
+          properties:
+            api:
+              type: string
+            environment:
+              type: string
+        dependencies:
+          type: object
+          properties:
+            github_api:
+              type: object
+              properties:
+                status:
+                  type: string
+                endpoint:
+                  type: string
+        worker_info:
+          type: object
+          properties:
+            datacenter:
+              type: string
+            runtime:
+              type: string
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        data:
+          type: object
+        message:
+          type: string
+        error:
+          type: string
+
+    CreateDatabaseRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    DeleteDatabaseRequest:
+      type: object
+      required:
+        - gist_id
+      properties:
+        gist_id:
+          type: string
+
+    CreateCollectionRequest:
+      type: object
+      required:
+        - gist_id
+        - name
+      properties:
+        gist_id:
+          type: string
+        name:
+          type: string
+
+    DeleteCollectionRequest:
+      type: object
+      required:
+        - gist_id
+        - collection_name
+      properties:
+        gist_id:
+          type: string
+        collection_name:
+          type: string
+
+    CreateObjectRequest:
+      type: object
+      required:
+        - gist_id
+        - collection_name
+        - data
+      properties:
+        gist_id:
+          type: string
+        collection_name:
+          type: string
+        data:
+          type: object
+
+    UpdateObjectRequest:
+      type: object
+      required:
+        - gist_id
+        - collection_name
+        - object_id
+        - data
+      properties:
+        gist_id:
+          type: string
+        collection_name:
+          type: string
+        object_id:
+          type: string
+        data:
+          type: object
+
+    DeleteObjectRequest:
+      type: object
+      required:
+        - gist_id
+        - collection_name
+        - object_id
+      properties:
+        gist_id:
+          type: string
+        collection_name:
+          type: string
+        object_id:
+          type: string
+
+    SearchRequest:
+      type: object
+      required:
+        - gist_id
+        - collection_name
+        - query
+      properties:
+        gist_id:
+          type: string
+        collection_name:
+          type: string
+        query:
+          type: string
+        field:
+          type: string
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
