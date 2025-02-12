@@ -7,6 +7,7 @@ mod models;
 mod routes;
 mod services;
 mod utils;
+use worker::*;
 
 #[event(fetch)]
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
@@ -37,6 +38,10 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     "health": {
                         "GET /health": "Check API health status"
                     },
+                    "docs": {
+                        "GET /docs": "API documentation",
+                        "GET /docs/openapi.yaml": "OpenAPI specification"
+                    },
                     "databases": {
                         "POST /api/databases": "Create a new database",
                         "GET /api/:gistId": "Get entire database contents",
@@ -60,6 +65,18 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             }))
         })
         .get_async("/health", health_routes::health_check)
+        .get("/docs/openapi.yaml", |_req, _ctx| {
+            let mut headers = Headers::new();
+            headers.set("Content-Type", "text/yaml")?;
+            Response::from_bytes(include_bytes!("../docs/openapi.yaml").to_vec())
+                .map(|resp| resp.with_headers(headers))
+        })
+        .get("/docs", |_req, _ctx| {
+            let mut headers = Headers::new();
+            headers.set("Content-Type", "text/html")?;
+            Response::from_bytes(include_bytes!("../docs/swagger-ui/index.html").to_vec())
+                .map(|resp| resp.with_headers(headers))
+        })
         .post_async("/api/databases", database_routes::create_database)
         .delete_async("/api/databases", database_routes::delete_database)
         .post_async("/api/collections", collection_routes::create_collection)
