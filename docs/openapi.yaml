@@ -41,6 +41,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/HealthResponse"
 
+  /docs/openapi.yaml:
+    get:
+      summary: Get OpenAPI specification
+      description: Returns the OpenAPI specification in YAML format
+      responses:
+        "200":
+          description: OpenAPI YAML document
+          content:
+            text/yaml:
+              schema:
+                type: string
+
+  /docs:
+    get:
+      summary: API Documentation
+      description: Interactive API documentation using Swagger UI
+      responses:
+        "200":
+          description: Swagger UI HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+
   /api/databases:
     post:
       summary: Create database
