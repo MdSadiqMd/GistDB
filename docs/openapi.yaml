@@ -13,6 +13,8 @@ info:
 servers:
   - description: GistDB Development Server
     url: http://localhost:8787/
+  - description: GistDB Production Server
+    url: https://gist-db.mohammadsadiq4950.workers.dev/
 
 paths:
   /:
