@@ -2,17 +2,7 @@
 [![AGPL-3.0 License](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
 [![API Version](https://img.shields.io/badge/API%20Version-1.0.0-brightgreen)](https://gist-db.mohammadsadiq4950.workers.dev/docs)
 
-A Rust-powered database that uses GitHub Gists as a storage layer. Simple, reliable, and secure.
-
-### Get Started
-#### 1. Production API URL
-```bash
-curl https://gist-db.mohammadsadiq4950.workers.dev/
-```
-#### 2. Documentation
-```bash
-https://gist-db.mohammadsadiq4950.workers.dev/docs
-```
+A Rust-powered database that uses GitHub Gists as a storage layer. Simple, Reliable, and Secure.
 
 ## 📌 Features
 
@@ -22,15 +12,15 @@ https://gist-db.mohammadsadiq4950.workers.dev/docs
 - **Search Capabilities**: Document search within collections
 - **Health Monitoring**: Built-in system health checks and status reporting
 
-## 🚀 Quick Start
+## ⚡ Getting Started
 
-### Base URLs
+#### 1. Production API URL
 ```bash
-# Development
-http://localhost:8787
-
-# Production
-https://gist-db.mohammadsadiq4950.workers.dev
+curl https://gist-db.mohammadsadiq4950.workers.dev/
+```
+#### 2. Documentation
+```bash
+https://gist-db.mohammadsadiq4950.workers.dev/docs
 ```
 
 ## 🔐 Authentication
