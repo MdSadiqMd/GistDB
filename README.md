@@ -6,8 +6,13 @@
 A Rust-powered database that uses GitHub Gists as a storage layer. Simple, reliable, and secure.
 
 ### Get Started
+#### 1. Production API URL
 ```bash
 curl https://gist-db.mohammadsadiq4950.workers.dev/
+```
+#### 2. Documentation
+```bash
+https://gist-db.mohammadsadiq4950.workers.dev/docs
 ```
 
 ## 📌 Features
@@ -52,7 +57,24 @@ GET /health
 ```
 ---
 
-### 2. **Database Operations**
+### 2. **Documentation**
+#### Get OpenAPI Specification
+```http
+GET /docs/openapi.yaml
+```
+**Response:**  
+Returns the OpenAPI specification in YAML format.
+
+#### Interactive API Documentation
+```http
+GET /docs
+```
+**Response:**  
+Returns the Swagger UI for interactive API exploration.
+
+---
+
+### 3. **Database Operations**
 #### Create Database
 ```http
 POST /api/databases
@@ -97,7 +119,7 @@ Authorization: Bearer <token>
 
 ---
 
-### 3. **Collection Operations**
+### 4. **Collection Operations**
 #### Create Collection
 ```http
 POST /api/collections
@@ -144,7 +166,7 @@ Authorization: Bearer <token>
 
 ---
 
-### 4. **Document Operations**
+### 5. **Document Operations**
 #### Create Object
 ```http
 POST /api/objects
@@ -224,7 +246,7 @@ Authorization: Bearer <token>
 
 ---
 
-### 5. **Search Operations**
+### 6. **Search Operations**
 #### Search Objects
 ```http
 POST /api/search
@@ -256,23 +278,6 @@ Authorization: Bearer <token>
   "error": null
 }
 ```
-
----
-
-### 6. **Documentation**
-#### Get OpenAPI Specification
-```http
-GET /docs/openapi.yaml
-```
-**Response:**  
-Returns the OpenAPI specification in YAML format.
-
-#### Interactive API Documentation
-```http
-GET /docs
-```
-**Response:**  
-Returns the Swagger UI for interactive API exploration.
 
 ---
 
