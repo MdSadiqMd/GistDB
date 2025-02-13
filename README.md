@@ -1,5 +1,4 @@
-# GistDB 🌐⚡
-
+![gistDB_logo](https://github.com/user-attachments/assets/f2124554-a44e-4e2a-b2ce-66e7acc0a402)
 [![AGPL-3.0 License](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
 [![API Version](https://img.shields.io/badge/API%20Version-1.0.0-brightgreen)](https://gist-db.mohammadsadiq4950.workers.dev/docs)
 
